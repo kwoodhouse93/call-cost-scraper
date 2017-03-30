@@ -22,7 +22,7 @@ class CallCostScraper:
     def load_page(self):
         self.driver.get(self.target_url)
 
-    def input_country(self, country):
+    def lookup_country(self, country):
         input_elem = self.driver.find_element_by_id("countryName")
         # TODO: Check if element is the input we're after
         input_elem.clear()
@@ -34,12 +34,13 @@ class CallCostScraper:
         paym_elem.click()
 
     def find_rate(self):
-        table_elem = self.driver.find_element_by_id("standardRatesTable")
-
-        return u"£1.50"
+        price_elem = self.driver.find_element_by_xpath("//*[@id='standardRatesTable']/tbody/tr[1]/td[contains(text(),'Landline')]/following-sibling::td[1]")
+        # TODO: Check it's the right row of the table
+        # TODO: Check we got a price
+        return price_elem.text
 
     def get_country_price(self, country):
-        self.input_country(country)
+        self.lookup_country(country)
         return self.find_rate()
 
     pass
